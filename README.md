@@ -211,6 +211,7 @@ src/main/java/com/prography/backend
 * 도메인 설계 및 Aggregate 경계 설정
 * 보증금 및 패널티 정책 구현 방향
 * AI 사용 사례 및 피드백 정리
+* 출석 처리 흐름 및 검증 순서
 
 ---
 
