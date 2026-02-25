@@ -73,6 +73,9 @@ public class Session extends BaseTimeEntity {
     public void cancel() {
         this.status = SessionStatus.CANCELLED;
     }
+    public boolean isCancelled() {
+        return this.status == SessionStatus.CANCELLED;
+    }
 
     public LocalDateTime getStartDateTime() {
         return LocalDateTime.of(sessionDate, sessionTime);
