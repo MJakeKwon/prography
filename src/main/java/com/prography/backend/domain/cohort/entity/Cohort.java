@@ -1,11 +1,11 @@
 package com.prography.backend.domain.cohort.entity;
 
-import com.prography.backend.global.common.BaseEntity;
+import com.prography.backend.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "cohorts")
-public class Cohort extends BaseEntity {
+public class Cohort extends BaseTimeEntity {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
