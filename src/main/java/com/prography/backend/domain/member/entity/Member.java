@@ -1,18 +1,25 @@
 package com.prography.backend.domain.member.entity;
 
-import com.prography.backend.global.common.BaseEntity;
-import com.prography.backend.global.common.MemberRole;
-import com.prography.backend.global.common.MemberStatus;
+import com.prography.backend.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(
         name = "members",
-        uniqueConstraints = @UniqueConstraint(name = "uk_members_login_id", columnNames = "login_id")
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_members_login_id", columnNames = "login_id")
+        }
 )
-public class Member extends BaseEntity {
+public class Member extends BaseTimeEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "login_id", nullable = false, length = 50)
@@ -21,39 +28,44 @@ public class Member extends BaseEntity {
     @Column(name = "password_hash", nullable = false, length = 255)
     private String passwordHash;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
-    @Column(length = 30)
+    @Column(name = "phone", nullable = false, length = 30)
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private MemberStatus status = MemberStatus.ACTIVE;
+    @Column(name = "status", nullable = false, length = 20)
+    private MemberStatus status;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private MemberRole role = MemberRole.MEMBER;
+    @Column(name = "role", nullable = false, length = 20)
+    private Role role;
 
-    protected Member() {}
-
-    public Member(String loginId, String passwordHash, String name, String phone, MemberRole role) {
+    @Builder
+    public Member(String loginId, String passwordHash, String name, String phone, MemberStatus status, Role role) {
         this.loginId = loginId;
         this.passwordHash = passwordHash;
         this.name = name;
         this.phone = phone;
+        this.status = status;
         this.role = role;
-        this.status = MemberStatus.ACTIVE;
     }
 
-    public Long getId() { return id; }
-    public String getLoginId() { return loginId; }
-    public String getPasswordHash() { return passwordHash; }
-    public String getName() { return name; }
-    public String getPhone() { return phone; }
-    public MemberStatus getStatus() { return status; }
-    public MemberRole getRole() { return role; }
+    public void updateProfile(String name, String phone) {
+        this.name = name;
+        this.phone = phone;
+    }
 
-    public void withdraw() { this.status = MemberStatus.WITHDRAWN; }
-    public boolean isWithdrawn() { return status == MemberStatus.WITHDRAWN; }
+    public void changePasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public void withdraw() {
+        this.status = MemberStatus.WITHDRAWN;
+    }
+
+    public boolean isWithdrawn() {
+        return this.status == MemberStatus.WITHDRAWN;
+    }
 }
